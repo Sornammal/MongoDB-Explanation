@@ -1,0 +1,176 @@
+Objective:
+
+To understand the basics of MongoDB including how to set up databases and collections, perform CRUD operations, use query operators, and apply this knowledge in a real-world use case such as a Library System.
+
+1. Database & Collection Setup
+
+Explanation:
+
+In MongoDB, a database is a container for collections. A collection is similar to a table in relational databases and stores documents (records).
+
+Database: Like a folder containing all your data.
+
+Collection: Like a table to organize related data.
+
+Document: A JSON-like object that stores actual data.
+
+Commands:
+
+use studentDB // Switch to or create a new database
+
+db.createCollection("library") // Create a new collection
+
+2. Insert Operations
+
+Explanation:
+
+Inserting data is the process of adding documents to a collection. MongoDB supports both single and multiple inserts.
+
+InsertOne: Adds a single document.
+
+InsertMany: Adds multiple documents at once.
+
+Examples:
+
+// Insert one student
+ db.students.insertOne({ name: "John Doe", age: 21, course: "MERN Stack", status: "ongoing" })
+
+// Insert multiple students
+ db.students.insertMany([
+   { name: "Alice", age: 22, course: "Python", status: "completed" },
+   { name: "Bob", age: 20, course: "MERN Stack", status: "ongoing" }
+ ])
+
+3. Read Operations
+
+Explanation:
+
+Reading data from the database allows us to retrieve and display information. We can:
+
+Fetch all documents.
+
+Apply filters using conditions (like course: "MERN Stack").
+
+Examples:
+
+// Fetch all documents
+ db.students.find()
+
+// Fetch students enrolled in MERN Stack
+ db.students.find({ course: "MERN Stack" })
+
+4. Update Operations
+
+Explanation:
+
+Update operations allow us to modify existing documents.
+
+UpdateOne: Updates the first document that matches the condition.
+
+UpdateMany: Updates all documents matching the condition.
+
+Examples:
+
+// Update a single student status
+ db.students.updateOne({ name: "Bob" }, { $set: { status: "completed" } })
+
+// Update all students in Python course to status ongoing
+ db.students.updateMany({ course: "Python" }, { $set: { status: "ongoing" } })
+
+5. Delete Operations
+
+Explanation:
+
+Deleting data removes documents from a collection.
+
+DeleteOne: Deletes the first matching document.
+
+DeleteMany: Deletes all matching documents.
+
+⚠️ Use deleteMany() with caution as it can remove a large number of records.
+
+Examples:
+
+// Delete one student
+ db.students.deleteOne({ name: "Alice" })
+
+// Delete all students (for practice)
+ db.students.deleteMany({})
+
+6. Query Operators
+
+Explanation:
+
+MongoDB provides several powerful operators to perform advanced queries:
+
+$gt - Greater than
+
+$lt - Less than
+
+$in - Matches values in an array
+
+$and, $or - Combines multiple conditions
+
+$exists - Checks if a field exists in a document
+
+These allow us to perform conditional checks and complex searches.
+
+Examples:
+
+// Find students older than 20
+ db.students.find({ age: { $gt: 20 } })
+
+// Find students aged below 22
+ db.students.find({ age: { $lt: 22 } })
+
+// Find students whose course is either MERN Stack or Python
+ db.students.find({ course: { $in: ["MERN Stack", "Python"] } })
+
+// Use $and
+ db.students.find({ $and: [ { age: { $gt: 20 } }, { course: "MERN Stack" } ] })
+
+// Use $or
+ db.students.find({ $or: [ { status: "ongoing" }, { course: "Python" } ] })
+
+// Check if a field exists
+ db.students.find({ joinedDate: { $exists: true } })
+
+7. Use Case: Library System
+
+Explanation:
+
+A Library System is a real-world scenario where MongoDB can be used to manage data such as books and members. You can:
+
+Insert new books and members.
+
+Search for books by title, author, or status (issued, available).
+
+Update book status when a book is issued or returned.
+
+Delete records when needed.
+
+Collections:
+
+books - Contains book details (title, author, status, category, issuedTo).
+
+members - Contains member details (name, email, membershipType, joinedDate).
+
+Examples:
+
+// Insert books
+ db.books.insertMany([
+   { title: "Atomic Habits", author: "James Clear", status: "available", category: "Self-help" },
+   { title: "1984", author: "George Orwell", status: "issued", issuedTo: "John Doe" }
+ ])
+
+// Insert members
+ db.members.insertOne({ name: "John Doe", email: "john@example.com", membershipType: "Premium", joinedDate: new Date() })
+
+// Find available books
+ db.books.find({ status: "available" })
+
+// Update book status to issued
+ db.books.updateOne({ title: "Atomic Habits" }, { $set: { status: "issued", issuedTo: "Alice" } })
+
+// Delete a member
+ db.members.deleteOne({ name: "John Doe" })
